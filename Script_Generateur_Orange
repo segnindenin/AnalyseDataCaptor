@@ -1,0 +1,49 @@
+import csv
+import os
+import datetime
+import random
+
+date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+header = ["DateTime","NumeroSim","N°Appellant","codeTenant","SoldeData",
+"SoldeSMS","SoldeAirtime","Serveur","CoordonneLatitude","CoordonneLongitude",
+"statut","Apn","Ipproxy","port","IdentifiantSiteBTS","MotPasse","NameUser","IPV4"]
+
+data = {"DateTime":date,"NumeroSim":"0707070707","N°Appellant":"0707070708","codeTenant":"****",
+"SoldeData":2000,"SoldeSMS":500,"SoldeAirtime":5000,"Serveur":"@coulby","CoordonneLatitude":"xxxx","CoordonneLongitude":"xxxx","statut":"xxxx",
+"Apn":"orangeciweb","Ipproxy":"40.72.124.20:80","port":"42","IdentifiantSiteBTS":"xxxx","MotPasse":"****","NameUser":"web",
+"IPV4":"192.168.1.25"}
+
+
+if os.path.exists('C:\\Users\\user\\deep_learning\\MDMS\\ModelSimulateur\\OrangeData.csv'):
+    with open('C:\\Users\\user\\deep_learning\\MDMS\\ModelSimulateur\\OrangeData.csv', "r", newline="") as file:
+        opened_file = file.readlines()
+        SoldeData = int(opened_file[-1].split(',')[4]) - random.randrange(0,100)
+        SoldeSMS = int(opened_file[-1].split(',')[5])- random.randrange(0,50)
+        SoldeAirtime = int(opened_file[-1].split(',')[6])- random.randrange(0,300)
+        if SoldeData < 0:
+            SoldeData = 0
+        if SoldeSMS < 0:
+            SoldeSMS = 0
+        if SoldeAirtime < 0:
+            SoldeAirtime = 0
+        # print(SoldeDataServeur)
+    with open('C:\\Users\\user\\deep_learning\\MDMS\\ModelSimulateur\\OrangeData.csv', "a+", newline="") as file:
+        data['SoldeData']=SoldeData
+        data['SoldeSMS']=SoldeSMS
+        data['SoldeAirtime']=SoldeAirtime
+        writer = csv.DictWriter(file, fieldnames=header)
+        writer.writerows([data])
+else :
+    with open('C:\\Users\\user\\deep_learning\\MDMS\\ModelSimulateur\\OrangeData.csv', "w", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=header)
+        writer.writeheader()
+        writer.writerows([data])
+
+# print(data)
+with open('C:\\Users\\user\\deep_learning\\MDMS\\ModelSimulateur\\OrangeData.csv', "r", newline="") as file:
+    files = csv.DictReader(file)
+    for line in files:
+        print(line['SoldeData'], line['SoldeSMS'], line['SoldeAirtime'])
+    
